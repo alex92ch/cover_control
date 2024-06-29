@@ -1,5 +1,5 @@
 blueprint:
-  name: sun protection
+  name: cover_control
   description: close cover when sun is shining and open when stops
   domain: automation
   source_url: https://github.com/alex92ch/cover_control/cover_control.yaml
