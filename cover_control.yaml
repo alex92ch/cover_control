@@ -123,18 +123,12 @@ action:
                     entity_id: "{{ cover_e }}"
                   service: cover.close_cover
               until:
-                - condition: device
-                  domain: cover
-                  entity_id: "{{ cover_e }}"
-                  type: is_closed
-          - condition: template
-            value_template: "{{ states(cover_e) == 'closed' }}"
+                - condition: template
+                  value_template: "{{ states(cover_e) == 'closed' }}"
           - data:
               entity_id: "{{ var_e }}"
               value: 1
             service: var.set
-          - condition: template
-            value_template: "{{ states(cover_e) == 'closed' }}"
           - service: automation.trigger
             metadata: {}
             data:
