@@ -117,9 +117,16 @@ action:
           - condition: template
             value_template: "{{ state_attr(temperature_service, 'temperature') > outdoor_temp }}"
         sequence:
-          - data_template:
-              entity_id: "{{ cover_e }}"
-            service: cover.close_cover
+          - repeat:
+              sequence:
+                - data_template:
+                    entity_id: "{{ cover_e }}"
+                  service: cover.close_cover
+              until:
+                - condition: device
+                  domain: cover
+                  entity_id: "{{ cover_e }}"
+                  type: is_closed
           - condition: template
             value_template: "{{ states(cover_e) == 'closed' }}"
           - data:
