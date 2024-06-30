@@ -108,7 +108,7 @@ action:
             value_template: "{{- is_state('input_boolean.cover_manage_cover_with_sun', 'on') -}}"
           - condition: template
             value_template: >-
-              {% set cloudiness_percentage = states(weather_service) | regex_replace('^.*?(\d+)%.*$', '\1') | int %}
+              {% set cloudiness_percentage = states(weather_service).state | regex_replace('^.*?(\d+)%.*$', '\\1') | int %}
               {{ cloudiness_percentage < cloudiness_close_threshold }}
           - condition: template
             value_template: "{{ states(var_e) != '1' }}"
@@ -143,7 +143,7 @@ action:
             value_template: "{{- is_state('input_boolean.cover_manage_cover_with_sun', 'on') -}}"
           - condition: template
             value_template: >-
-              {% set cloudiness_percentage = states(weather_service) | regex_replace('^.*?(\d+)%.*$', '\1') | int %}
+              {% set cloudiness_percentage = states(weather_service).state | regex_replace('^.*?(\d+)%.*$', '\\1') | int %}
               {{ cloudiness_percentage < cloudiness_open_threshold }}
           - condition: template
             value_template: "{{ states(var_e) == '1' }}"
