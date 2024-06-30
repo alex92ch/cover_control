@@ -37,11 +37,24 @@ blueprint:
           min: -100
           max: 360
           unit_of_measurement: °
+    temperature:
+      name: Temperature service
+      selector:
+        entity:
+          domain: weather
     weather:
       name: Weather service
       selector:
         entity:
-          domain: weather
+          domain: sensor
+    cloudiness:
+      name: Percentage of cloudiness above which the shutters will close
+      default: 32
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
     outdoor_temp:
       name: Outdoor temperature
       description: Temperature above which the shutters will close
@@ -54,11 +67,13 @@ blueprint:
 
 variables:
   cover_e: !input cover_entity
+  cloudiness_threshold: !input cloudiness
   var_e: "{{ 'var.' + cover_e[6:] }}"
   protection_begin: !input sun_position_start
   protection_end: !input sun_position_end
   elevation_begin: !input sun_elevation_start
   outdoor_temp: !input outdoor_temp
+  temperature_service: !input temperature
   weather_service: !input weather
 
 mode: parallel
@@ -80,18 +95,14 @@ action:
       - conditions:
           - condition: template
             value_template: "{{- is_state('input_boolean.cover_manage_cover_with_sun', 'on') -}}"
-          - condition: or
-            conditions:
-              - condition: template
-                value_template: "{{ states(weather_service) == 'partlycloudy' }}"
-              - condition: template
-                value_template: "{{ states(weather_service) == 'sunny' }}"
+          - condition: template
+            value_template: "{{ states(weather_service) > cloudiness_threshold }}"
           - condition: template
             value_template: "{{ states(var_e) != '1' }}"
           - condition: template
             value_template: "{{ state_attr('sun.sun', 'azimuth') > protection_begin and state_attr('sun.sun', 'azimuth') < protection_end and state_attr('sun.sun', 'elevation') > elevation_begin }}"
           - condition: template
-            value_template: "{{ state_attr(weather_service, 'temperature') > outdoor_temp }}"
+            value_template: "{{ state_attr(temperature_service, 'temperature') > outdoor_temp }}"
         sequence:
           - data_template:
               entity_id: "{{ cover_e }}"
