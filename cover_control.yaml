@@ -147,11 +147,9 @@ action:
             value_template: >-
               {% set cloudiness_str = states(weather_service) %}
               {% set cloudiness_percentage = (cloudiness_str | regex_replace('^.*?(\d+)%.*$', '\\1')) | int %}
-              {{ cloudiness_percentage > cloudiness_open_threshold }}
+              {{ cloudiness_percentage > cloudiness_open_threshold or (state_attr('sun.sun', 'azimuth') < protection_begin or state_attr('sun.sun', 'azimuth') > protection_end or state_attr('sun.sun', 'elevation') < elevation_begin) }}
           - condition: template
             value_template: "{{ states(var_e) == '1' }}"
-          - condition: template
-            value_template: "{{ (state_attr('sun.sun', 'azimuth') < protection_begin or state_attr('sun.sun', 'azimuth') > protection_end or  state_attr('sun.sun', 'elevation') < elevation_begin) }}"
 
         sequence:
           - data_template:
