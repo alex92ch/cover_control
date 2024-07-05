@@ -131,9 +131,11 @@ action:
               value: 1
             service: var.set
           - service: cover.set_cover_position
-            entity_id: "{{ cover_e }}"
+            target:
+              entity_id: "{{ cover_e }}"
             data:
               position: 1
+
       ##########################################################
       # open cover
       ##########################################################
