@@ -130,13 +130,10 @@ action:
               entity_id: "{{ var_e }}"
               value: 1
             service: var.set
-          - service: automation.trigger
-            metadata: {}
+          - service: cover.set_cover_position
+            entity_id: "{{ cover_e }}"
             data:
-              skip_condition: true
-            target:
-              entity_id: automation.neue_automatisierung_3
-
+              position: 1
       ##########################################################
       # open cover
       ##########################################################
