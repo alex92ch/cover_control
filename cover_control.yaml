@@ -130,11 +130,16 @@ action:
               entity_id: "{{ var_e }}"
               value: 1
             service: var.set
-          - service: cover.set_cover_position
-            target:
-              entity_id: "{{ cover_e }}"
-            data:
-              position: 1
+          - repeat:
+              sequence:
+                - data_template:
+                    entity_id: "{{ cover_e }}"
+                  service: cover.set_cover_position
+                  data:
+                    position: 1
+              until:
+                - condition: template
+                  value_template: "{{ states(cover_e.attributes.current_position) == 1 }}"
 
       ##########################################################
       # open cover
