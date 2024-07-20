@@ -125,11 +125,16 @@ action:
                   service: cover.close_cover
               until:
                 - condition: template
-                  value_template: "{{ state_attr('cover_e', 'current_position') == 0 }}"
+                  value_template: "{{ states(cover_e) == 'closed' }}"
           - data:
               entity_id: "{{ var_e }}"
               value: 1
             service: var.set
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 2
+              milliseconds: 0
           - repeat:
               sequence:
                 - data_template:
@@ -163,7 +168,7 @@ action:
                   service: cover.open_cover
               until:
                 - condition: template
-                  value_template: "{{ state_attr('cover_e', 'current_position') == 100 }}"
+                  value_template: "{{ states(cover_e) == 'open' }}"
           - data:
               entity_id: "{{ var_e }}"
               value: 0
