@@ -135,16 +135,11 @@ action:
               minutes: 0
               seconds: 2
               milliseconds: 0
-          - repeat:
-              sequence:
-                - data_template:
-                    entity_id: "{{ cover_e }}"
-                  service: cover.set_cover_position
-                  data:
-                    position: 1
-              until:
-                - condition: template
-                  value_template: "{{ state_attr('cover_e', 'current_position') == 1 }}"
+          - service: cover.set_cover_position
+            target:
+              entity_id: "{{ cover_e }}"
+            data:
+              position: 1
 
       ##########################################################
       # open cover
