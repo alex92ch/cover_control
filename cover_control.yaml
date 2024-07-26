@@ -101,7 +101,7 @@ condition:
 action:
   - choose:
       ##########################################################
-      # close cover 
+      # close cover
       ##########################################################
       - conditions:
           - condition: template
