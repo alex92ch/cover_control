@@ -1,8 +1,8 @@
 blueprint:
-  name: cover_control
+  name: cover_control_basic
   description: close cover when sun is shining and open when stops
   domain: automation
-  source_url: https://github.com/alex92ch/cover_control/cover_control.yaml
+  source_url: https://github.com/alex92ch/cover_control/cover_control_basic.yaml
   input:
     cover_entity:
       name: cover
