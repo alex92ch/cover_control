@@ -134,6 +134,16 @@ action:
               entity_id: "{{ var_e }}"
               value: 1
             service: var.set
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 2
+              milliseconds: 0
+          - service: cover.set_cover_position
+            target:
+              entity_id: "{{ cover_e }}"
+            data:
+              position: 1
 
       ##########################################################
       # open cover
