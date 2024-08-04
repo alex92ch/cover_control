@@ -151,14 +151,18 @@ action:
       - conditions:
           - condition: template
             value_template: "{{- is_state('input_boolean.cover_manage_cover_with_sun', 'on') -}}"
-          - condition: template
-            value_template: >-
-              {% set cloudiness_str = states(weather_service) %}
-              {% set cloudiness_percentage = (cloudiness_str | regex_replace('^.*?(\d+)%.*$', '\\1')) | int %}
-              {{ cloudiness_percentage > cloudiness_open_threshold or (state_attr('sun.sun', 'azimuth') < protection_begin or state_attr('sun.sun', 'azimuth') > protection_end or state_attr('sun.sun', 'elevation') < elevation_begin) }}
+          - condition: or
+            conditions:
+              - condition: template
+                value_template: >-
+                  {% set cloudiness_str = states(weather_service) %}
+                  {% set cloudiness_percentage = (cloudiness_str | regex_replace('^.*?(\d+)%.*$', '\\1')) | int %}
+                  {{ cloudiness_percentage > cloudiness_open_threshold or (state_attr('sun.sun', 'azimuth') < protection_begin or state_attr('sun.sun', 'azimuth') > protection_end or state_attr('sun.sun', 'elevation') < elevation_begin) }}
+              - condition: time
+                after: "11:00:00"
+                before: "20:00:00"
           - condition: template
             value_template: "{{ states(var_e) == '1' }}"
-
         sequence:
           - repeat:
               sequence:
