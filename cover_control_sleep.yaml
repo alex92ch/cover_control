@@ -65,12 +65,6 @@ blueprint:
           min: 0
           max: 100
           unit_of_measurement: "%"
-    close_time:
-      name: Closing time
-      description: Time when the shutters will close at evening
-      default: "20:00:00"
-      selector:
-        time: {}
     outdoor_temp:
       name: Outdoor temperature
       description: Temperature above which the shutters will close
@@ -82,7 +76,6 @@ blueprint:
           unit_of_measurement: °C
 variables:
   cover_e: !input cover_entity
-  close_time: !input close_time
   cloudiness_open_threshold: !input cloudiness_open
   cloudiness_close_threshold: !input cloudiness_close
   var_e: "{{ 'var.' + cover_e[6:] }}"
@@ -124,7 +117,7 @@ action:
               - condition: template
                 value_template: "{{ state_attr('sun.sun', 'azimuth') > protection_begin and state_attr('sun.sun', 'azimuth') < protection_end and state_attr('sun.sun', 'elevation') > elevation_begin }}"
               - condition: time
-                after: "{{ close_time }}"
+                after: "20:00:00"
                 before: "11:00:00"
           - condition: template
             value_template: "{{ state_attr(temperature_service, 'temperature') > outdoor_temp }}"
